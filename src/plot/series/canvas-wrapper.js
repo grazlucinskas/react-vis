@@ -28,29 +28,6 @@ import {ANIMATED_SERIES_PROPS} from 'utils/series-utils';
 const MAX_DRAWS = 30;
 
 /**
- * Draw loop draws each of the layers until it should draw more
- * @param {CanvasContext} ctx - the context where the drawing will take place
- * @param {Number} height - height of the canvas
- * @param {Number} width - width of the canvas
- * @param {Array} layers - the layer objects to render
- */
-function engageDrawLoop(ctx, height, width, layers) {
-  let drawIteration = 0;
-  // using setInterval because request animation frame goes too fast
-  const drawCycle = setInterval(() => {
-    if (!ctx) {
-      clearInterval(drawCycle);
-      return;
-    }
-    drawLayers(ctx, height, width, layers, drawIteration);
-    if (drawIteration >= MAX_DRAWS) {
-      clearInterval(drawCycle);
-    }
-    drawIteration += 1;
-  }, 1);
-}
-
-/**
  * Loops across each of the layers to be drawn and draws them
  * @param {CanvasContext} ctx - the context where the drawing will take place
  * @param {Number} height - height of the canvas
@@ -175,7 +152,32 @@ class CanvasWrapper extends Component {
       return;
     }
 
-    engageDrawLoop(ctx, height, width, layers);
+    this.engageDrawLoop(ctx, height, width, layers);
+  }
+
+  /**
+   * Draw loop draws each of the layers until it should draw more
+   * @param {CanvasContext} ctx - the context where the drawing will take place
+   * @param {Number} height - height of the canvas
+   * @param {Number} width - width of the canvas
+   * @param {Array} layers - the layer objects to render
+   */
+  engageDrawLoop(ctx, height, width, layers) {
+    let drawIteration = 0;
+    // using setInterval because request animation frame goes too fast
+    clearInterval(this.drawCycle);
+    
+    this.drawCycle = setInterval(() => {
+      if (!ctx) {
+        clearInterval(this.drawCycle);
+        return;
+      }
+      drawLayers(ctx, height, width, layers, drawIteration);
+      if (drawIteration >= MAX_DRAWS) {
+        clearInterval(this.drawCycle);
+      }
+      drawIteration += 1;
+    }, 1);
   }
 
   render() {
