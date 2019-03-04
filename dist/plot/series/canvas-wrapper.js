@@ -51,29 +51,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var MAX_DRAWS = 30;
 
 /**
- * Draw loop draws each of the layers until it should draw more
- * @param {CanvasContext} ctx - the context where the drawing will take place
- * @param {Number} height - height of the canvas
- * @param {Number} width - width of the canvas
- * @param {Array} layers - the layer objects to render
- */
-function engageDrawLoop(ctx, height, width, layers) {
-  var drawIteration = 0;
-  // using setInterval because request animation frame goes too fast
-  var drawCycle = setInterval(function () {
-    if (!ctx) {
-      clearInterval(drawCycle);
-      return;
-    }
-    drawLayers(ctx, height, width, layers, drawIteration);
-    if (drawIteration >= MAX_DRAWS) {
-      clearInterval(drawCycle);
-    }
-    drawIteration += 1;
-  }, 1);
-}
-
-/**
  * Loops across each of the layers to be drawn and draws them
  * @param {CanvasContext} ctx - the context where the drawing will take place
  * @param {Number} height - height of the canvas
@@ -197,12 +174,42 @@ var CanvasWrapper = function (_Component) {
         return;
       }
 
-      engageDrawLoop(ctx, height, width, layers);
+      this.engageDrawLoop(ctx, height, width, layers);
+    }
+
+    /**
+     * Draw loop draws each of the layers until it should draw more
+     * @param {CanvasContext} ctx - the context where the drawing will take place
+     * @param {Number} height - height of the canvas
+     * @param {Number} width - width of the canvas
+     * @param {Array} layers - the layer objects to render
+     */
+
+  }, {
+    key: 'engageDrawLoop',
+    value: function engageDrawLoop(ctx, height, width, layers) {
+      var _this2 = this;
+
+      var drawIteration = 0;
+      // using setInterval because request animation frame goes too fast
+      clearInterval(this.drawCycle);
+
+      this.drawCycle = setInterval(function () {
+        if (!ctx) {
+          clearInterval(_this2.drawCycle);
+          return;
+        }
+        drawLayers(ctx, height, width, layers, drawIteration);
+        if (drawIteration >= MAX_DRAWS) {
+          clearInterval(_this2.drawCycle);
+        }
+        drawIteration += 1;
+      }, 1);
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _props = this.props,
           innerHeight = _props.innerHeight,
@@ -229,7 +236,7 @@ var CanvasWrapper = function (_Component) {
             width: width + 'px'
           },
           ref: function ref(_ref) {
-            return _this2.canvas = _ref;
+            return _this3.canvas = _ref;
           }
         }),
         this.props.children
