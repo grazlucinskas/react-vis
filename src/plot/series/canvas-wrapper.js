@@ -43,7 +43,7 @@ function engageDrawLoop(ctx, height, width, layers) {
       return;
     }
     drawLayers(ctx, height, width, layers, drawIteration);
-    if (drawIteration > MAX_DRAWS) {
+    if (drawIteration >= MAX_DRAWS) {
       clearInterval(drawCycle);
     }
     drawIteration += 1;
@@ -150,7 +150,8 @@ class CanvasWrapper extends Component {
       marginBottom,
       marginLeft,
       marginRight,
-      marginTop
+      marginTop,
+      pixelRatio
     } = newProps;
     if (!ctx) {
       return;
@@ -165,6 +166,10 @@ class CanvasWrapper extends Component {
       oldProps ? oldProps.children : []
     );
     // if we don't need to be animating, dont! cut short
+
+    ctx.resetTransform();
+    ctx.scale(pixelRatio, pixelRatio);
+
     if (!childrenShouldAnimate) {
       drawLayers(ctx, height, width, layers);
       return;
