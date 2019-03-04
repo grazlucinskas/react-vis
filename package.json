@@ -36,8 +36,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run remove-unpm-rfs",
-      "pre-commit": "npm run build"
+      "pre-push": "npm run remove-unpm-rfs"
     }
   },
   "dependencies": {
