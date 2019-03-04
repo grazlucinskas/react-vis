@@ -33,7 +33,7 @@
     "cover": "nyc --reporter=text --reporter=html --reporter=lcov npm test",
     "prettier": "prettier --write $(git ls-files | grep '.js$')",
     "remove-unpm-rfs": "./remove-refs-to-unpm.pl",
-    "preinstall": "npm i && npm run build"
+    "postinstall": "npm i && npm run build"
   },
   "husky": {
     "hooks": {
