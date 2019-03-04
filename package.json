@@ -32,7 +32,8 @@
     "full-test": "npm run lint && npm run cover",
     "cover": "nyc --reporter=text --reporter=html --reporter=lcov npm test",
     "prettier": "prettier --write $(git ls-files | grep '.js$')",
-    "remove-unpm-rfs": "./remove-refs-to-unpm.pl"
+    "remove-unpm-rfs": "./remove-refs-to-unpm.pl",
+    "preinstall": "npm run build"
   },
   "husky": {
     "hooks": {
